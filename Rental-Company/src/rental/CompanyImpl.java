@@ -1,7 +1,6 @@
 package rental;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,16 +12,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import rental.CarType;
-import rental.Quote;
-import rental.Reservation;
-import rental.ReservationConstraints;
-import rental.ReservationException;
+public class CompanyImpl implements Company {
 
-public class CompanyImpl implements rental.Company {
-
-	private static Logger logger = Logger.getLogger(CompanyImpl.class
-			.getName());
+	private static Logger logger = Logger
+			.getLogger(CompanyImpl.class.getName());
 
 	private String name;
 	private List<Car> cars;
@@ -156,8 +149,8 @@ public class CompanyImpl implements rental.Company {
 	}
 
 	@Override
-	public Reservation confirmQuote(Quote quote) throws ReservationException,
-			RemoteException {
+	public synchronized Reservation confirmQuote(Quote quote)
+			throws ReservationException, RemoteException {
 		logger.log(Level.INFO, "<{0}> Reservation of {1}", new Object[] { name,
 				quote.toString() });
 		List<Car> availableCars = getAvailableCars(quote.getCarType(),
@@ -176,7 +169,7 @@ public class CompanyImpl implements rental.Company {
 	}
 
 	@Override
-	public void cancelReservation(rental.Reservation res)
+	public synchronized void cancelReservation(rental.Reservation res)
 			throws RemoteException {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}",
 				new Object[] { name, res.toString() });
@@ -184,13 +177,21 @@ public class CompanyImpl implements rental.Company {
 	}
 
 	@Override
-	public List<rental.Reservation> getReservationsBy(String client)
-			throws RemoteException {
-		List<rental.Reservation> clientReservations = new ArrayList<>();
+	public int getNumberOfReservations() throws RemoteException {
+		int nbReservations = 0;
 		for (Car car : cars) {
-			clientReservations.addAll(car.getReservationsBy(client));
+			nbReservations += car.getReservations().size();
 		}
-		return clientReservations;
+		return nbReservations;
+	}
+
+	@Override
+	public int getNumberOfReservationsBy(String client) throws RemoteException {
+		int nbReservations = 0;
+		for (Car car : cars) {
+			nbReservations += car.getReservationsBy(client).size();
+		}
+		return nbReservations;
 	}
 
 	@Override
@@ -204,4 +205,5 @@ public class CompanyImpl implements rental.Company {
 		}
 		return nbReservations;
 	}
+
 }
