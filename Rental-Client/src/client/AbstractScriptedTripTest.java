@@ -275,14 +275,14 @@ public abstract class AbstractScriptedTripTest<ReservationSession,ManagerSession
                 String favorite = null;
                 List<String> favorites = Arrays.asList(pars.split("/"));
                 if(name.equals("CRA")) {
-                    favorite = getFavoriteCarRentalCompany(rental);
+                    favorite = getMostPopularCarRentalCompany(rental);
                     if(favorites.contains(favorite)) {
                         System.out.println(name + " has correct favorite car rental company: " + pars + " " + favorite);
                     } else {
                         System.err.println(name + " has wrong favorite car rental company: " + pars + " " + favorite);
                     } 
                 } else {
-                    favorite = getFavoriteCarTypeIn(rental, name).getName();
+                    favorite = getMostPopularCarTypeIn(rental, name).getName();
                     if(favorites.contains(favorite)) {
                         System.out.println(name + " has correct favorite car type: " + pars + " " + favorite);
                     } else {
