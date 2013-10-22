@@ -1,13 +1,15 @@
 package client;
 
+import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import rental.Company;
+import rental.Ageny;
 import rental.CarType;
+import rental.Company;
 import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
@@ -24,15 +26,24 @@ public class Client extends AbstractScriptedSimpleTest {
 		// TODO Use an RMISecurityManager for the next session
 		System.setSecurityManager(null);
 
-		String host = (args.length < 1) ? null : args[0];
-		String carRentalCompanyName = (args.length < 2) ? "Hertz" : args[1];
+		// Script file
+		String scriptFile = (args.length < 0) ? "trips" : args[0];
+		// Registry host
+		String host = (args.length < 1) ? null : args[1];
+		Registry registry = LocateRegistry.getRegistry(host);
 
+		// Lookup agency
+		Ageny agency = null;
 		try {
-			Registry registry = LocateRegistry.getRegistry(host);
-			Company stub = (Company) registry
-					.lookup(carRentalCompanyName);
+			agency = (Ageny) registry.lookup(Ageny.class.getSimpleName());
+		} catch (NotBoundException e1) {
+			System.err.println("Agency not bound");
+			System.exit(-1);
+		}
 
-			Client client = new Client("simpleTrips", stub);
+		// Run client
+		try {
+			Client client = new Client(scriptFile, agency);
 			client.run();
 		} catch (Exception e) {
 			System.err.println("Client exception: " + e.toString());

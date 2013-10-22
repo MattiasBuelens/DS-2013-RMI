@@ -13,30 +13,32 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-	public static void main(String[] args) throws ReservationException,
-			NumberFormatException, IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Use an RMISecurityManager for the next session
 		System.setSecurityManager(null);
 
-		String host = (args.length < 1) ? null : args[0];
+		// Company name
+		String companyName = (args.length < 1) ? null : args[0];
+		// Registry host
+		String host = (args.length < 2) ? null : args[1];
+		Registry registry = LocateRegistry.getRegistry(host);
 
 		// Create company
-		List<Car> cars = loadData("hertz.csv");
-		CompanyImpl company = new CompanyImpl("Hertz", cars);
+		List<Car> cars = loadData(companyName.toLowerCase() + ".csv");
+		CompanyImpl company = new CompanyImpl(companyName, cars);
 
-		// Stub company
-		rental.Company stub = (rental.Company) UnicastRemoteObject
-				.exportObject(company, 0);
-
+		// Bind stub to registry
+		Company stub = (Company) UnicastRemoteObject.exportObject(company, 0);
 		try {
-			// Bind the remote object's stub in the registry
-			Registry registry = LocateRegistry.getRegistry(host);
 			registry.bind(company.getName(), stub);
 		} catch (AlreadyBoundException e) {
-			System.err.println("Already bound");
+			System.err.println("Company server already bound");
 			System.exit(-1);
 		}
-		System.out.println("Server ready");
+
+		System.out.println("Company server ready");
+		System.out.println("Managers can now register this company");
+		System.out.println("Registry lookup name: " + company.getName());
 	}
 
 	public static List<Car> loadData(String datafile)
