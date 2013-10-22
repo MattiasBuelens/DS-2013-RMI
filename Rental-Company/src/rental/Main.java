@@ -11,9 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import rental.impl.CarRentalCompany;
-
-public class RentalServer {
+public class Main {
 
 	public static void main(String[] args) throws ReservationException,
 			NumberFormatException, IOException {
@@ -24,10 +22,10 @@ public class RentalServer {
 
 		// Create company
 		List<Car> cars = loadData("hertz.csv");
-		CarRentalCompany company = new CarRentalCompany("Hertz", cars);
+		CompanyImpl company = new CompanyImpl("Hertz", cars);
 
 		// Stub company
-		rental.CarRentalCompany stub = (rental.CarRentalCompany) UnicastRemoteObject
+		rental.Company stub = (rental.Company) UnicastRemoteObject
 				.exportObject(company, 0);
 
 		try {

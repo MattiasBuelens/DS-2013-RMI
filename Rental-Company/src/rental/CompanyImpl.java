@@ -1,4 +1,4 @@
-package rental.impl;
+package rental;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -13,16 +13,15 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import rental.Car;
 import rental.CarType;
 import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
 import rental.ReservationException;
 
-public class CarRentalCompany implements rental.CarRentalCompany {
+public class CompanyImpl implements rental.Company {
 
-	private static Logger logger = Logger.getLogger(CarRentalCompany.class
+	private static Logger logger = Logger.getLogger(CompanyImpl.class
 			.getName());
 
 	private String name;
@@ -33,7 +32,7 @@ public class CarRentalCompany implements rental.CarRentalCompany {
 	 * CONSTRUCTOR *
 	 ***************/
 
-	public CarRentalCompany(String name, List<Car> cars) {
+	public CompanyImpl(String name, List<Car> cars) {
 		logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...",
 				name);
 		setName(name);

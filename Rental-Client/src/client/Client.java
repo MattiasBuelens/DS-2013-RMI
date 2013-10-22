@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import rental.CarRentalCompany;
+import rental.Company;
 import rental.CarType;
 import rental.Quote;
 import rental.Reservation;
@@ -14,7 +14,7 @@ import rental.ReservationConstraints;
 
 public class Client extends AbstractScriptedSimpleTest {
 
-	private CarRentalCompany company;
+	private Company company;
 
 	/********
 	 * MAIN *
@@ -29,7 +29,7 @@ public class Client extends AbstractScriptedSimpleTest {
 
 		try {
 			Registry registry = LocateRegistry.getRegistry(host);
-			CarRentalCompany stub = (CarRentalCompany) registry
+			Company stub = (Company) registry
 					.lookup(carRentalCompanyName);
 
 			Client client = new Client("simpleTrips", stub);
@@ -44,7 +44,7 @@ public class Client extends AbstractScriptedSimpleTest {
 	 * CONSTRUCTOR *
 	 ***************/
 
-	public Client(String scriptFile, CarRentalCompany company) {
+	public Client(String scriptFile, Company company) {
 		super(scriptFile);
 		this.company = company;
 	}
