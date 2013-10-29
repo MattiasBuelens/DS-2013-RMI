@@ -1,6 +1,7 @@
 package rental;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import rental.session.ManagerSession;
@@ -21,13 +22,19 @@ public class AgencyImpl implements Agency {
 	}
 
 	@Override
-	public ReservationSession createReservationSession(String clientName) {
-		return new ReservationSessionImpl(this, clientName);
+	public ReservationSession createReservationSession(String clientName)
+			throws RemoteException {
+		ReservationSession session = new ReservationSessionImpl(this,
+				clientName);
+		return (ReservationSession) UnicastRemoteObject
+				.exportObject(session, 0);
 	}
 
 	@Override
-	public ManagerSession createManagerSession(String managerName) {
-		return new ManagerSessionImpl(this, managerName);
+	public ManagerSession createManagerSession(String managerName)
+			throws RemoteException {
+		ManagerSession ms = new ManagerSessionImpl(this, managerName);
+		return (ManagerSession) UnicastRemoteObject.exportObject(ms, 0);
 	}
 
 	@Override
@@ -44,13 +51,13 @@ public class AgencyImpl implements Agency {
 	@Override
 	public void registerCompany(String name, Company company) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void unregisterCompany(String name) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

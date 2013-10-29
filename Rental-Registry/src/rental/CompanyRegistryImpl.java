@@ -1,8 +1,8 @@
 package rental;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class CompanyRegistryImpl implements CompanyRegistry {
@@ -11,7 +11,7 @@ public class CompanyRegistryImpl implements CompanyRegistry {
 
 	@Override
 	public Collection<Company> getAllCompanies() {
-		return Collections.unmodifiableCollection(companies.values());
+		return new HashSet<Company>(companies.values());
 	}
 
 	@Override

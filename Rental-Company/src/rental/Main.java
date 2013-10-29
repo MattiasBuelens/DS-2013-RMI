@@ -3,7 +3,7 @@ package rental;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,14 +11,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import rental.session.ManagerSession;
+
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		// TODO Use an RMISecurityManager for the next session
 		System.setSecurityManager(null);
 
 		// Company name
-		String companyName = (args.length < 1) ? null : args[0];
+		String companyName = (args.length < 1) ? "Hertz" : args[0];
 		// Registry host
 		String host = (args.length < 2) ? null : args[1];
 		Registry registry = LocateRegistry.getRegistry(host);
@@ -27,18 +28,21 @@ public class Main {
 		List<Car> cars = loadData(companyName.toLowerCase() + ".csv");
 		CompanyImpl company = new CompanyImpl(companyName, cars);
 
-		// Bind stub to registry
-		Company stub = (Company) UnicastRemoteObject.exportObject(company, 0);
+		// Lookup agency
+		Agency agency = null;
 		try {
-			registry.bind(company.getName(), stub);
-		} catch (AlreadyBoundException e) {
-			System.err.println("Company server already bound");
+			agency = (Agency) registry.lookup(Agency.class.getSimpleName());
+		} catch (NotBoundException e) {
+			System.err.println("Agency not bound");
 			System.exit(-1);
 		}
 
-		System.out.println("Company server ready");
-		System.out.println("Managers can now register this company");
-		System.out.println("Registry lookup name: " + company.getName());
+		// Bind stub to agency
+		Company stub = (Company) UnicastRemoteObject.exportObject(company, 0);
+		ManagerSession ms = agency.createManagerSession(companyName);
+		ms.registerCompany(companyName, stub);
+
+		System.out.println("Company server " + companyName + " ready");
 	}
 
 	public static List<Car> loadData(String datafile)

@@ -17,18 +17,17 @@ import rental.session.ReservationSession;
 public class Client extends
 		AbstractScriptedTripTest<ReservationSession, ManagerSession> {
 
-	private Agency agency;
+	private final Agency agency;
 
 	/********
 	 * MAIN *
 	 ********/
 
 	public static void main(String[] args) throws Exception {
-		// TODO Use an RMISecurityManager for the next session
 		System.setSecurityManager(null);
 
 		// Script file
-		String scriptFile = (args.length < 0) ? "trips" : args[0];
+		String scriptFile = (args.length < 1) ? "trips" : args[0];
 		// Registry host
 		String host = (args.length < 1) ? null : args[1];
 		Registry registry = LocateRegistry.getRegistry(host);
@@ -37,7 +36,7 @@ public class Client extends
 		Agency agency = null;
 		try {
 			agency = (Agency) registry.lookup(Agency.class.getSimpleName());
-		} catch (NotBoundException e1) {
+		} catch (NotBoundException e) {
 			System.err.println("Agency not bound");
 			System.exit(-1);
 		}

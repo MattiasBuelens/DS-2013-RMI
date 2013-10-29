@@ -9,7 +9,6 @@ import java.rmi.server.UnicastRemoteObject;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		// TODO Use an RMISecurityManager for the next session
 		System.setSecurityManager(null);
 
 		// Registry host
