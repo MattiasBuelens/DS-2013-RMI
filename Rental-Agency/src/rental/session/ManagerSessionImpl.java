@@ -2,13 +2,10 @@ package rental.session;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 import rental.Agency;
 import rental.CarType;
 import rental.Company;
-import rental.CompanyRegistry;
 
 public class ManagerSessionImpl extends Session implements ManagerSession {
 
@@ -53,10 +50,9 @@ public class ManagerSessionImpl extends Session implements ManagerSession {
 	public String getMostPopularCarRentalCompany() throws RemoteException {
 		String mostPopular = null;
 		int maxReservations = Integer.MIN_VALUE;
-		for (Map.Entry<String, Company> entry : getAgency().getAllCompanies()
-				.entrySet()) {
-			String companyName = entry.getKey();
-			int nbReservations = entry.getValue().getNumberOfReservations();
+		for (Company company : getAgency().getAllCompanies()) {
+			String companyName = company.getName();
+			int nbReservations = company.getNumberOfReservations();
 			if (nbReservations > maxReservations) {
 				mostPopular = companyName;
 				maxReservations = nbReservations;
