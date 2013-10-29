@@ -18,15 +18,20 @@ import rental.Reservation;
  * 
  * Supported commands
  * 
- * <command>C add to other command to indicate that <command> is expected to
- * fail <client> S Session: start a client session for client named <client>
- * <client> A <from> <till> Availability: check which car types are available
- * from <from> until <till>. <client> B <from> <till> <car type> Book: add a
- * quote to the session of <client>, for a car of type <car type> from <from>
- * until <till>. <client> F Finalize: finalize the quotes made for client
- * <client> <client> MR Manager, Reservations: print all reservations of client
- * <client> <company> M <type:nr>* Manager: check total number of reservations
- * per car type, in company <company>, each type <type> has <nr> reservations
+ * <command>C
+ * add to other command to indicate that <command> is expected to fail
+ * <client> S
+ * Session: start a client session for client named <client>
+ * <client> A <from> <till>
+ *        Availability: check which car types are available from <from> until <till>.
+ * <client> B <from> <till> <car type>
+ * Book: add a quote to the session of <client>, for a car of type <car type> from <from> until <till>.
+ * <client> F
+ * Finalize: finalize the quotes made for client <client>
+ * <client> MR
+ *         Manager, Reservations: print all reservations of client <client>
+ * <company> M <type:nr>*
+ * Manager: check total number of reservations per car type, in company <company>, each type <type> has <nr> reservations
  */
 public abstract class AbstractScriptedTripTest<ReservationSession, ManagerSession> {
 
