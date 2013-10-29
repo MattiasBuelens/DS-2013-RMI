@@ -46,11 +46,9 @@ public class ReservationSessionImpl extends Session implements
 	}
 
 	@Override
-	public Quote addQuote(Date start, Date end, String carType,
+	public Quote addQuote(ReservationConstraints constraints,
 			String carRentalName) throws RemoteException, ReservationException {
 		Company company = getAgency().getCompany(carRentalName);
-		ReservationConstraints constraints = new ReservationConstraints(start,
-				end, carType);
 		Quote quote = company.createQuote(constraints, getClientName());
 		quotes.add(quote);
 		return quote;

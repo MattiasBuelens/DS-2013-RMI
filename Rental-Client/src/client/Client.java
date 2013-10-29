@@ -9,14 +9,15 @@ import java.util.Set;
 
 import rental.Agency;
 import rental.CarType;
-import rental.Company;
-import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
+import rental.session.ManagerSession;
+import rental.session.ReservationSession;
 
-public class Client extends AbstractScriptedSimpleTest {
+public class Client extends
+		AbstractScriptedTripTest<ReservationSession, ManagerSession> {
 
-	private Company company;
+	private Agency agency;
 
 	/********
 	 * MAIN *
@@ -55,26 +56,26 @@ public class Client extends AbstractScriptedSimpleTest {
 	 * CONSTRUCTOR *
 	 ***************/
 
-	public Client(String scriptFile, Company company) {
+	public Client(String scriptFile, Agency agency) {
 		super(scriptFile);
-		this.company = company;
+		this.agency = agency;
 	}
 
-	/**
-	 * Check which car types are available in the given period and print this
-	 * list of car types.
-	 * 
-	 * @param start
-	 *            start time of the period
-	 * @param end
-	 *            end time of the period
-	 * @throws Exception
-	 *             if things go wrong, throw exception
-	 */
 	@Override
-	protected void checkForAvailableCarTypes(Date start, Date end)
+	protected ReservationSession getNewReservationSession(String name)
 			throws Exception {
-		Set<CarType> carTypes = company.getAvailableCarTypes(start, end);
+		return agency.createReservationSession(name);
+	}
+
+	@Override
+	protected ManagerSession getNewManagerSession(String name) throws Exception {
+		return agency.createManagerSession(name);
+	}
+
+	@Override
+	protected void checkForAvailableCarTypes(ReservationSession session,
+			Date start, Date end) throws Exception {
+		Set<CarType> carTypes = session.getAvailableCarTypes(start, end);
 		System.out.println("Available car types between " + start + " and "
 				+ end + ":");
 		for (CarType carType : carTypes) {
@@ -82,74 +83,43 @@ public class Client extends AbstractScriptedSimpleTest {
 		}
 	}
 
-	/**
-	 * Retrieve a quote for a given car type (tentative reservation).
-	 * 
-	 * @param clientName
-	 *            name of the client
-	 * @param start
-	 *            start time for the quote
-	 * @param end
-	 *            end time for the quote
-	 * @param carType
-	 *            type of car to be reserved
-	 * @return the newly created quote
-	 * 
-	 * @throws Exception
-	 *             if things go wrong, throw exception
-	 */
 	@Override
-	protected Quote createQuote(String clientName, Date start, Date end,
-			String carType) throws Exception {
+	protected void addQuoteToSession(ReservationSession session, Date start,
+			Date end, String carType, String carRentalName) throws Exception {
 		ReservationConstraints constraints = new ReservationConstraints(start,
 				end, carType);
-		return company.createQuote(constraints, clientName);
+		session.addQuote(constraints, carRentalName);
 	}
 
-	/**
-	 * Confirm the given quote to receive a final reservation of a car.
-	 * 
-	 * @param quote
-	 *            the quote to be confirmed
-	 * @return the final reservation of a car
-	 * 
-	 * @throws Exception
-	 *             if things go wrong, throw exception
-	 */
 	@Override
-	protected Reservation confirmQuote(Quote quote) throws Exception {
-		return company.confirmQuote(quote);
-	}
-
-	/**
-	 * Get all reservations made by the given client.
-	 * 
-	 * @param clientName
-	 *            name of the client
-	 * @return the list of reservations of the given client
-	 * 
-	 * @throws Exception
-	 *             if things go wrong, throw exception
-	 */
-	@Override
-	protected List<Reservation> getReservationsBy(String clientName)
+	protected List<Reservation> confirmQuotes(ReservationSession session)
 			throws Exception {
-		return company.getReservationsBy(clientName);
+		return session.confirmQuotes();
 	}
 
-	/**
-	 * Get the number of reservations for a particular car type.
-	 * 
-	 * @param carType
-	 *            name of the car type
-	 * @return number of reservations for the given car type
-	 * 
-	 * @throws Exception
-	 *             if things go wrong, throw exception
-	 */
 	@Override
-	protected int getNumberOfReservationsForCarType(String carType)
+	protected int getNumberOfReservationsBy(ManagerSession ms, String clientName)
 			throws Exception {
-		return company.getNumberOfReservationsForCarType(carType);
+		return ms.getNumberOfReservationsBy(clientName);
 	}
+
+	@Override
+	protected int getNumberOfReservationsForCarType(ManagerSession ms,
+			String carRentalCompanyName, String carType) throws Exception {
+		return ms.getNumberOfReservationsForCarType(carRentalCompanyName,
+				carType);
+	}
+
+	@Override
+	protected String getMostPopularCarRentalCompany(ManagerSession ms)
+			throws Exception {
+		return ms.getMostPopularCarRentalCompany();
+	}
+
+	@Override
+	protected CarType getMostPopularCarTypeIn(ManagerSession ms,
+			String carRentalCompanyName) throws Exception {
+		return ms.getMostPopularCarTypeIn(carRentalCompanyName);
+	}
+
 }
