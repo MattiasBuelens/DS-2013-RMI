@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import rental.Ageny;
+import rental.Agency;
 import rental.CarType;
 import rental.Company;
 import rental.Quote;
@@ -33,9 +33,9 @@ public class Client extends AbstractScriptedSimpleTest {
 		Registry registry = LocateRegistry.getRegistry(host);
 
 		// Lookup agency
-		Ageny agency = null;
+		Agency agency = null;
 		try {
-			agency = (Ageny) registry.lookup(Ageny.class.getSimpleName());
+			agency = (Agency) registry.lookup(Agency.class.getSimpleName());
 		} catch (NotBoundException e1) {
 			System.err.println("Agency not bound");
 			System.exit(-1);

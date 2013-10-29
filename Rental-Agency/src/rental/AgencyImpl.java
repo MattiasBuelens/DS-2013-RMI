@@ -5,7 +5,7 @@ import rental.session.ManagerSessionImpl;
 import rental.session.ReservationSession;
 import rental.session.ReservationSessionImpl;
 
-public class AgencyImpl implements Ageny {
+public class AgencyImpl implements Agency {
 
 	private final CompanyRegistry companyRegistry;
 

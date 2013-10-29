@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import rental.session.ManagerSession;
 import rental.session.ReservationSession;
 
-public interface Ageny extends Remote {
+public interface Agency extends Remote {
 
 	public ReservationSession createReservationSession(String clientName)
 			throws RemoteException;

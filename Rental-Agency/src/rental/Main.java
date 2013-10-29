@@ -30,9 +30,9 @@ public class Main {
 		AgencyImpl ageny = new AgencyImpl(companyRegistry);
 
 		// Bind stub to registry
-		Ageny stub = (Ageny) UnicastRemoteObject.exportObject(ageny, 0);
+		Agency stub = (Agency) UnicastRemoteObject.exportObject(ageny, 0);
 		try {
-			registry.bind(Ageny.class.getSimpleName(), stub);
+			registry.bind(Agency.class.getSimpleName(), stub);
 		} catch (AlreadyBoundException e) {
 			System.err.println("Agency already bound");
 			System.exit(-1);
