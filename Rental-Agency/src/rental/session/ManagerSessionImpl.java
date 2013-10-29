@@ -1,40 +1,42 @@
 package rental.session;
 
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import rental.Agency;
 import rental.CarType;
 import rental.Company;
 import rental.CompanyRegistry;
 
 public class ManagerSessionImpl extends Session implements ManagerSession {
 
-	public ManagerSessionImpl(CompanyRegistry registry, String managerName) {
-		super(registry, managerName);
+	public ManagerSessionImpl(Agency agency, String managerName) {
+		super(agency, managerName);
 	}
 
 	@Override
-	public Set<String> getAllCompanies() throws RemoteException {
-		return getRegistry().getAllCompanies().keySet();
+	public Collection<Company> getAllCompanies() throws RemoteException {
+		return getAgency().getAllCompanies();
 	}
 
 	@Override
 	public void registerCompany(String companyName, Company company)
 			throws RemoteException {
-		getRegistry().registerCompany(companyName, company);
+		getAgency().registerCompany(companyName, company);
 	}
 
 	@Override
 	public void unregisterCompany(String companyName) throws RemoteException {
-		getRegistry().unregisterCompany(companyName);
+		getAgency().unregisterCompany(companyName);
 	}
 
 	@Override
 	public int getNumberOfReservationsBy(String clientName)
 			throws RemoteException {
 		int nbReservations = 0;
-		for (Company company : getRegistry().getAllCompanies().values()) {
+		for (Company company : getAgency().getAllCompanies()) {
 			nbReservations += company.getNumberOfReservationsBy(clientName);
 		}
 		return nbReservations;
@@ -43,7 +45,7 @@ public class ManagerSessionImpl extends Session implements ManagerSession {
 	@Override
 	public int getNumberOfReservationsForCarType(String carRentalCompanyName,
 			String carType) throws RemoteException {
-		Company company = getRegistry().getCompany(carRentalCompanyName);
+		Company company = getAgency().getCompany(carRentalCompanyName);
 		return company.getNumberOfReservationsForCarType(carType);
 	}
 
@@ -51,7 +53,7 @@ public class ManagerSessionImpl extends Session implements ManagerSession {
 	public String getMostPopularCarRentalCompany() throws RemoteException {
 		String mostPopular = null;
 		int maxReservations = Integer.MIN_VALUE;
-		for (Map.Entry<String, Company> entry : getRegistry().getAllCompanies()
+		for (Map.Entry<String, Company> entry : getAgency().getAllCompanies()
 				.entrySet()) {
 			String companyName = entry.getKey();
 			int nbReservations = entry.getValue().getNumberOfReservations();
@@ -68,7 +70,7 @@ public class ManagerSessionImpl extends Session implements ManagerSession {
 			throws RemoteException {
 		CarType mostPopular = null;
 		int maxReservations = Integer.MIN_VALUE;
-		Company company = getRegistry().getCompany(carRentalCompanyName);
+		Company company = getAgency().getCompany(carRentalCompanyName);
 		for (CarType carType : company.getAllCarTypes()) {
 			int nbReservations = company
 					.getNumberOfReservationsForCarType(carType.getName());

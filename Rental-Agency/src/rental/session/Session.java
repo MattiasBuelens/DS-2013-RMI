@@ -1,19 +1,19 @@
 package rental.session;
 
-import rental.CompanyRegistry;
+import rental.Agency;
 
 public abstract class Session {
 
-	private final CompanyRegistry registry;
+	private final Agency agency;
 	private final String clientName;
 
-	public Session(CompanyRegistry registry, String clientName) {
-		this.registry = registry;
+	public Session(Agency agency, String clientName) {
+		this.agency = agency;
 		this.clientName = clientName;
 	}
 
-	protected CompanyRegistry getRegistry() {
-		return registry;
+	protected Agency getAgency() {
+		return agency;
 	}
 
 	protected String getClientName() {

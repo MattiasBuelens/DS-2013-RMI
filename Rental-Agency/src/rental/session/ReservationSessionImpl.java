@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import rental.Agency;
 import rental.CarType;
 import rental.Company;
-import rental.CompanyRegistry;
 import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
@@ -21,8 +21,8 @@ public class ReservationSessionImpl extends Session implements
 
 	private final Set<Quote> quotes = new HashSet<>();
 
-	public ReservationSessionImpl(CompanyRegistry registry, String clientName) {
-		super(registry, clientName);
+	public ReservationSessionImpl(Agency agency, String clientName) {
+		super(agency, clientName);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class ReservationSessionImpl extends Session implements
 	public Set<CarType> getAvailableCarTypes(Date start, Date end)
 			throws RemoteException {
 		Set<CarType> availableTypes = new HashSet<CarType>();
-		for (Company company : getRegistry().getAllCompanies().values()) {
+		for (Company company : getAgency().getAllCompanies()) {
 			availableTypes.addAll(company.getAvailableCarTypes(start, end));
 		}
 		return availableTypes;
@@ -48,7 +48,7 @@ public class ReservationSessionImpl extends Session implements
 	@Override
 	public Quote addQuote(Date start, Date end, String carType,
 			String carRentalName) throws RemoteException, ReservationException {
-		Company company = getRegistry().getCompany(carRentalName);
+		Company company = getAgency().getCompany(carRentalName);
 		ReservationConstraints constraints = new ReservationConstraints(start,
 				end, carType);
 		Quote quote = company.createQuote(constraints, getClientName());
@@ -63,7 +63,7 @@ public class ReservationSessionImpl extends Session implements
 		try {
 			// Place reservations
 			for (Quote quote : getCurrentQuotes()) {
-				Company company = getRegistry().getCompany(
+				Company company = getAgency().getCompany(
 						quote.getRentalCompany());
 				Reservation reservation = company.confirmQuote(quote);
 				reservations.add(reservation);
@@ -71,7 +71,7 @@ public class ReservationSessionImpl extends Session implements
 		} catch (ReservationException e) {
 			// Roll back
 			for (Reservation reservation : reservations) {
-				Company company = getRegistry().getCompany(
+				Company company = getAgency().getCompany(
 						reservation.getRentalCompany());
 				company.cancelReservation(reservation);
 			}

@@ -1,5 +1,6 @@
 package rental;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,13 +10,13 @@ public class CompanyRegistryImpl implements CompanyRegistry {
 	private Map<String, Company> companies = new HashMap<>();
 
 	@Override
-	public Map<String, Company> getAllCompanies() {
-		return Collections.unmodifiableMap(companies);
+	public Collection<Company> getAllCompanies() {
+		return Collections.unmodifiableCollection(companies.values());
 	}
 
 	@Override
 	public Company getCompany(String companyName) {
-		return getAllCompanies().get(companyName);
+		return companies.get(companyName);
 	}
 
 	@Override
