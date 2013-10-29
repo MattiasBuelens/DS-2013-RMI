@@ -43,21 +43,18 @@ public class AgencyImpl implements Agency {
 	}
 
 	@Override
-	public Company getCompany(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Company getCompany(String name) throws RemoteException {
+		return companyRegistry.getCompany(name);
 	}
 
 	@Override
-	public void registerCompany(String name, Company company) {
-		// TODO Auto-generated method stub
-
+	public void registerCompany(String name, Company company) throws RemoteException {
+		companyRegistry.registerCompany(name, company);
 	}
 
 	@Override
-	public void unregisterCompany(String name) {
-		// TODO Auto-generated method stub
-
+	public void unregisterCompany(String name) throws RemoteException {
+		companyRegistry.unregisterCompany(name);
 	}
 
 }
