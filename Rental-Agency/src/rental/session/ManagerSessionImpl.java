@@ -1,7 +1,7 @@
 package rental.session;
 
 import java.rmi.RemoteException;
-import java.util.Collection;
+import java.util.Set;
 
 import rental.Agency;
 import rental.CarType;
@@ -14,7 +14,7 @@ public class ManagerSessionImpl extends Session implements ManagerSession {
 	}
 
 	@Override
-	public Collection<Company> getAllCompanies() throws RemoteException {
+	public Set<Company> getAllCompanies() throws RemoteException {
 		return getAgency().getAllCompanies();
 	}
 

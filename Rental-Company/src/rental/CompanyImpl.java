@@ -53,7 +53,7 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public Collection<CarType> getAllCarTypes() {
-		return carTypes.values();
+		return new HashSet<>(carTypes.values());
 	}
 
 	@Override

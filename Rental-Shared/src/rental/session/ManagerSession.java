@@ -2,14 +2,14 @@ package rental.session;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Collection;
+import java.util.Set;
 
 import rental.CarType;
 import rental.Company;
 
 public interface ManagerSession extends Remote {
 
-	public Collection<Company> getAllCompanies() throws RemoteException;
+	public Set<Company> getAllCompanies() throws RemoteException;
 
 	public void registerCompany(String companyName, Company company)
 			throws RemoteException;

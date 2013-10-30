@@ -2,7 +2,7 @@ package rental;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Collection;
+import java.util.Set;
 
 import rental.session.ManagerSession;
 import rental.session.ManagerSessionImpl;
@@ -38,7 +38,7 @@ public class AgencyImpl implements Agency {
 	}
 
 	@Override
-	public Collection<Company> getAllCompanies() throws RemoteException {
+	public Set<Company> getAllCompanies() throws RemoteException {
 		return companyRegistry.getAllCompanies();
 	}
 
@@ -48,7 +48,8 @@ public class AgencyImpl implements Agency {
 	}
 
 	@Override
-	public void registerCompany(String name, Company company) throws RemoteException {
+	public void registerCompany(String name, Company company)
+			throws RemoteException {
 		companyRegistry.registerCompany(name, company);
 	}
 
