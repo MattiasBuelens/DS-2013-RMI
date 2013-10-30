@@ -19,7 +19,12 @@ public class Main {
 		System.setSecurityManager(null);
 
 		// Company name
-		String companyName = (args.length < 1) ? "Hertz" : args[0];
+		if (args.length < 1) {
+			throw new IllegalArgumentException(
+					"Missing required first argument: company name");
+		}
+		String companyName = args[0];
+
 		// Registry host
 		String host = (args.length < 2) ? null : args[1];
 		Registry registry = LocateRegistry.getRegistry(host);
