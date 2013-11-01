@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 
 import rental.session.ManagerSession;
 
-public class Main {
+public class CompanyMain {
 
 	public static void main(String[] args) throws Exception {
 		System.setSecurityManager(null);
